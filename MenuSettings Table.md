@@ -13,11 +13,6 @@ Table of the known size parameters
 | 0x1c   | 0x4    | int               | cup                      |
 | 0x20   | 0x4    | int               | unk                      |
 | 0x24   | 0x4    | int               | lastCharacter            |
-| 0x28   | 0x1    | undefined         |                          |
-| 0x29   | 0x1    | undefined         |                          |
-| 0x2a   | 0x1    | undefined         |                          |
-| 0x2b   | 0x1    | undefined         |                          |
-| 0x2c   | 0x1    | undefined         |                          |
 | 0x30   | 0x4    | int               |                          |
 | 0x38   | 0x4    | int               |                          |
 | 0x3c   | 0x4    | int               |                          |
