@@ -33,7 +33,7 @@ typedef struct {
 } Header;
 
 typedef struct {
-    u32 track_offsets[TRACK_COUNT];
+    o32 track_offsets[TRACK_COUNT];
     char date[16];
 } TrackTable;
 
