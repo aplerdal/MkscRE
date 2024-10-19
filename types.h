@@ -1,6 +1,12 @@
+// From https://github.com/aplerdal/MkscRE
+
 // types.h
-// Contains known types from mksc
+// Contains several known types from mksc
 #pragma once
+
+#ifdef _cplusplus
+extern "C" {
+#endif
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -38,22 +44,28 @@ typedef struct {
 } TrackTable;
 
 typedef struct {
-    u16 b:5;
-    u16 g:5;
-    u16 r:5;
+    u8 b:5;
+    u8 g:5;
+    u8 r:5;
+    u8  :1;
 } BGR;
 
-typedef track_palette BGR[256];
-typedef track_behaviors u8[256];
+typedef BGR palette256[256];
+typedef BGR palette16[16];
+typedef u8 track_behaviors[256];
 
+
+#define TRACK_FLAGS_SPLIT_TILESET 1 << 0
+#define TRACK_FLAGS_SPLIT_LAYOUT 1 << 1
+#define TRACK_FLAGS_SPLIT_OBJECTS 1 << 2
 
 typedef struct{ /*0x100*/
     //Offset
     /*0x00*/ u8 magic;
     /*0x01*/ b8 compressed_tileset;
     /*0x02*/ u8 padding1;
-    /*0x03*/ u8 track_flags; // Flags are mostly unknown at the moment.
-    /*0x04*/ u8 width; // These could be the wrong way around
+    /*0x03*/ u8 track_flags;
+    /*0x04*/ u8 width;
     /*0x05*/ u8 height;
     /*0x06*/ u8 padding2[2+40];
     /*0x30*/ u32 reused_tileset;
@@ -117,3 +129,7 @@ typedef struct{
     u8 y;
     u8 zone;
 } Object;
+
+#ifdef _cplusplus
+}
+#endif
