@@ -24,9 +24,18 @@ typedef uint8_t  o8;
 typedef uint16_t o16;
 typedef uint32_t o32;
 
+// Pointer type to support 64 bit OSes
+typedef uint32_t p32;
+
 // Bool Sizes
 typedef uint8_t  b8;
 typedef uint32_t b32;
+
+typedef uint16_t BGR;
+
+typedef BGR palette256[256];
+typedef BGR palette16[16];
+typedef u8 track_behaviors[256];
 
 #define TRACK_COUNT 49
 
@@ -36,28 +45,45 @@ typedef struct {
     char title[12];
     char code[4];
     char maker[2];
-} Header;
+} Entry;
 
+#define TRACK_TABLE_ADDRESS 0x258000
 typedef struct {
     o32 track_offsets[TRACK_COUNT];
     char date[16];
 } TrackTable;
 
+#define CUP_DEFINITION_ADRESS 0xe7464
+typedef u32 CupDefinitions[52];
+
+// Do not need this as it isn't techically used in the game, rather it has a constant table (Definition pointer table)
+// in memory instead at e7ff0 that points to each indiviual element.
+#define DEFINITION_TABLE_ADDRESS 0xE7534
+
 typedef struct {
-    u8 b:5;
-    u8 g:5;
-    u8 r:5;
-    u8  :1;
-} BGR;
+    u32 track_id;
+    u32 background_id;
+    u32 background_behavior;
+    u32 animation;
+    u32 material;
+    p32 turn_instructions;
+    u32 music_id;
+    p32 target_set_table;
+    p32 unk;
+    p32 track_cover_gfx;
+    p32 track_cover_pal;
+    p32 locked_palette;
+    p32 track_name_gfx;
+    u32 unused_lap_count; // Can be turned useable via a patch, but unused in base game.
+} TrackDefinition;
 
-typedef BGR palette256[256];
-typedef BGR palette16[16];
-typedef u8 track_behaviors[256];
+#define DEFINITION_POINTER_TABLE 0xe7ff0
+// Should not be directly casted
+typedef TrackDefinition* DefinitionTable[TRACK_COUNT];
 
-
-#define TRACK_FLAGS_SPLIT_TILESET 1 << 0
-#define TRACK_FLAGS_SPLIT_LAYOUT 1 << 1
-#define TRACK_FLAGS_SPLIT_OBJECTS 1 << 2
+#define TRACK_FLAGS_SPLIT_TILESET (1 << 0)
+#define TRACK_FLAGS_SPLIT_LAYOUT  (1 << 1)
+#define TRACK_FLAGS_SPLIT_OBJECTS (1 << 2)
 
 typedef struct{ /*0x100*/
     //Offset
@@ -65,12 +91,12 @@ typedef struct{ /*0x100*/
     /*0x01*/ b8 compressed_tileset;
     /*0x02*/ u8 padding1;
     /*0x03*/ u8 track_flags;
-    /*0x04*/ u8 width;
+    /*0x04*/ u8 width; // These could be the wrong way around
     /*0x05*/ u8 height;
     /*0x06*/ u8 padding2[2+40];
     /*0x30*/ u32 reused_tileset;
     /*0x34*/ u8 padding3[12];
-    /*0x40*/ o32 track_layout_offset;
+    /*0x40*/ o32 layout_offset;
     /*0x44*/ u8 padding4[60];
     /*0x80*/ o32 tileset_offset;
     /*0x84*/ o32 palette_offset;
