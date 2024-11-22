@@ -85,8 +85,8 @@ typedef TrackDefinition* DefinitionTable[TRACK_COUNT];
 #define TRACK_FLAGS_SPLIT_LAYOUT  (1 << 1)
 #define TRACK_FLAGS_SPLIT_OBJECTS (1 << 2)
 
-typedef struct{ /*0x100*/
-    //Offset
+#pragma pack(1)
+typedef struct TrackHeader{ /*0x100*/
     /*0x00*/ u8 magic;
     /*0x01*/ b8 compressed_tileset;
     /*0x02*/ u8 padding1;
@@ -107,16 +107,16 @@ typedef struct{ /*0x100*/
     /*0x98*/ o32 finish_line_offset;
     /*0x9C*/ u32 unk1;
     /*0xA0*/ u8 padding5[4];
-    /*0xA8*/ u8 battle_unk1[28];
-    /*0xC4*/ u32 track_routine;
-    /*0xC8*/ o32 minimap_offset;
-    /*0xCC*/ u8 battle_unk2[4];
-    /*0xD0*/ o32 ai_offset;
-    /*0xD4*/ u8 padding6[20];
-    /*0xE8*/ o32 object_gfx_offset;
-    /*0xEC*/ o32 object_pal_offset;
-    /*0xF0*/ u32 reused_object;
-    /*0xF4*/ u8 padding7[16];
+    /*0xA4*/ u8 battle_unk1[28];
+    /*0xC0*/ u32 track_routine;
+    /*0xC4*/ o32 minimap_offset;
+    /*0xC8*/ u8 battle_unk2[4];
+    /*0xCC*/ o32 ai_offset;
+    /*0xD0*/ u8 padding6[20];
+    /*0xE4*/ o32 object_gfx_offset;
+    /*0xE8*/ o32 object_pal_offset;
+    /*0xEC*/ u32 reused_object;
+    /*0xF0*/ u8 padding7[16];
 } TrackHeader;
 
 #pragma pack(1)
@@ -126,19 +126,28 @@ typedef struct{
     o16 targets_offset;
 } AiHeader;
 
+#define TARGET_FLAGS_INTERSECTION 1<<7
+#define TARGET_MASK_FLAGS 0xF0
+#define TARGET_MASK_SPEED 0x0F
 #pragma pack(1)
 typedef struct{
     u16 x;
     u16 y;
-    u16 speed;
-    u16 flags;
+    union {
+        u8 speed;
+        u8 flags;
+    };
+    u8 padding[3];
 } AiTarget;
 
-#define ZONE_SHAPE_RECTANGLE 0
-#define ZONE_SHAPE_TRIANGLE_TOP_LEFT 1
-#define ZONE_SHAPE_TRIANGLE_TOP_RIGHT 2
-#define ZONE_SHAPE_TRIANGLE_BOTTOM_LEFT 3
-#define ZONE_SHAPE_TRIANGLE_BOTTOM_RIGHT 4
+enum ZoneShape {
+    ZONE_SHAPE_RECTANGLE,
+    ZONE_SHAPE_TRIANGLE_TOP_LEFT,
+    ZONE_SHAPE_TRIANGLE_TOP_RIGHT,
+    ZONE_SHAPE_TRIANGLE_BOTTOM_RIGHT,
+    ZONE_SHAPE_TRIANGLE_BOTTOM_LEFT,
+};
+
 
 #pragma pack(1)
 typedef struct{
@@ -147,7 +156,10 @@ typedef struct{
     u16 half_y;
     u16 half_width;
     u16 half_height;
+    u8 padding[3];
 } AiZone;
+
+
 
 typedef struct{
     u8 id;
