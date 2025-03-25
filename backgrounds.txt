@@ -2,8 +2,9 @@ Background gfx table @ 0x234000
 
 20 backgrounds
 
+
 Key:
-    1: unknown, valid values are 1, 2, 4, 7, 8, 16, 64, 128 (values affect where the background is loaded in vram)
+    1: background size, valid values are 1, 2, 4, 8, 16, 64, 128
     2: compression flags (0 = uncompressed, 1 = compressed, 2 = split graphics)
     3: unknown
     4: graphics offset
@@ -32,3 +33,15 @@ Key:
 | 0x2515FC | 02 03 10 00 20000000 84140000 B8150000 90170000 54190000 |
 | 0x252FD0 | 02 03 06 00 20000000 74170000 241A0000 981D0000 181F0000 |
 | 0x254F68 | 02 03 06 00 20000000 8C190000 881B0000 041D0000 A01E0000 |
+
+
+bg sizes:
+|value| front |  mid  | back  |
+| 0x1 | 32x32 | 32x32 | 32x32 |
+| 0x2 | 32x32 | 32x32 | 32x32 |
+| 0x4 |*32x64*| 32x32 | 32x32 |
+| 0x8 | 32x32 |*32x64*| 32x32 |
+| 0x10| 32x32 | 32x32 |*32x64*|
+| 0x20|*64x32*| 32x32 | 32x32 |
+| 0x40| 32x32 |*64x32*| 32x32 |
+| 0x80| 32x32 | 32x32 |*64x32*|
