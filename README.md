@@ -1,8 +1,6 @@
 # MkscRE
 Mario Kart: Super Circuit reverse engineering project
 
-This project covers several aspects of reverse engineering the game. This is currently a work in progress, and things may break at any time.
+A repository of various notes and resources relating to Mario Kart: Super Circuit.
 
-Right now, this project covers:
-- Symbol names
-- Headers
+This project is in no way affiliated with Nintendo.
